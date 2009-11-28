@@ -1,0 +1,46 @@
+@keyframes despair{
+	0%{
+		opacity: 0;
+	}
+	100%{
+		opacity: 1;
+	}
+}
+
+.modal{
+	display: flex;
+	flex-direction:column;
+	position:absolute;
+	width: 50vw;
+	height: 30vh;
+	transform: translate(-50%,-50%);
+	top:50%;
+	left: 50%;
+	border-radius: 2em;
+	background-color:transparent;
+}
+
+.modal__picture{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 70%;
+	width: 100%
+}
+
+.modal__picture__img{
+	object-fit:contain;
+	height: 100%;
+	width: 90%
+}
+
+.winner__player{
+	animation: despair 1s;
+	margin:0;
+	height: 30%;
+	width: 100%;
+	text-align: center;
+	font-size: 6em;
+	font-weight: bold;
+	color:rgba(20,20,20,0.8);
+}

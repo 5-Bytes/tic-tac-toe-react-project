@@ -1,121 +1,140 @@
-import React from 'react';
+import React, { useState,useEffect }from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Header from './components/Header/Header';
+import Modal from './components/Modal/Modal';
 
-function Square(props){
-	return (
+const Square=(props)=>{
+	return(
 		<button className="square"
 		onClick={props.onClick}
 		>
-		{props.value}
+			{props.children}
 		</button>
-	);
-}
+		);
+};
 
-class Board extends React.Component {
+const Board = (props) => {
 	
-	renderSquare(i) {
+	const renderSquare = (i)=>{
     return (
 		<Square 
-		value = 
-		{this.props.squares[i]}		
 		onClick={() =>
-		this.props.onClick(i)}/>
+		props.onClick(i)}>
+			{props.squares[i] && <img className='icon-player' src={`./assets/${props.squares[i]}.png`} />}
+		</Square>
 		);
-  }
-  
-  render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
-}
+	};
 
-class Game extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			history:[{
-				squares:Array(9).fill(null),
-			}],
-			xIsNext:true,
-			stepNumber:0,
-		}
+ 	return (
+    <>
+      <div className="board-row">
+        {renderSquare(0)}
+        {renderSquare(1)}
+        {renderSquare(2)}
+      </div>
+      <div className="board-row">
+        {renderSquare(3)}
+        {renderSquare(4)}
+        {renderSquare(5)}
+      </div>
+      <div className="board-row">
+        {renderSquare(6)}
+        {renderSquare(7)}
+        {renderSquare(8)}
+      </div>
+    </>
+  )
+};
+
+const Game = (props)=> {
+
+	const [playerOneIsNext,setPlayerOneIsNext]=useState(true);
+	const [paramsGame,setParamsGame]=useState({playerOne:null,playerTwo:null,points:null});
+	const [squares,setSquares]=useState(Array(9).fill(null));
+	const [rating,setRating]= useState({playerOne:0,playerTwo:0});
+	const [visible,changeVisible]= useState(false);
+	const [winner,setWinner]= useState(null);
+	const [visibleModal,changeVisibleModal]=useState(false)
+
+	const resetSquares= () =>{
+		setSquares(Array(9).fill(null))
+		setPlayerOneIsNext(true);
+	};
+
+	const resetGame= ()=> {
+		setParamsGame({playerOne:null,playerTwo:null,points:null});
+		setRating({playerOne:0,playerTwo:0});
+		changeVisible(false);
 	}
-	
-	handleClick(i){
-			const history = this.state.history.slice(0,this.state.stepNumber+1);
-			const current = history[history.length-1];
-			const squares = current.squares.slice();
-			if(calculateWinner(squares) || squares[i]){
+
+	useEffect(()=>{
+		let winner=calculateWinner(squares);
+		if(!winner && !squares.includes(null)){
+				console.log("empate");
+				resetSquares();
 				return;
-			}
-			squares[i]=this.state.xIsNext ? 'X' : 'O';
-			this.setState({
-				history:history.concat([{
-					squares:squares,
-				}]),
-				xIsNext:!this.state.xIsNext,
-				stepNumber:history.length,
-			});
-	}
-	jumpTo(step){
-		this.setState({
-			stepNumber:step,
-			xIsNext:(step%2)===0,
-		});
-	}
-  render() {
-		const history = this.state.history;
-		const current = history[this.state.stepNumber];
-		const winner = calculateWinner(current.squares);
-		const moves = history.map((step, move) => {
-			const desc = move ? 'Go to move #' + move : 'Go to game start';
-			return (
-				<li key={move}>
-					<button onClick={() => this.jumpTo(move)}>{desc}</button>
-				</li>
-			);
-		});
-		let status; 
-		if(winner) {
-			status =`Winner: ${winner}`;
-		}else {
-			status = `Next Player:${this.state.xIsNext? 'X' : 'O'}`;
 		}
-		
-     return (
+		if(rating.playerOne === paramsGame.points){
+				setWinner("Player 1")
+				changeVisibleModal(true);
+				resetGame();
+				return;
+		}
+
+		if(rating.playerTwo===paramsGame.points){
+				setWinner("Player 2");
+				changeVisibleModal(true);
+				resetGame();
+				return;
+		}
+
+		if(winner){
+			if(winner===paramsGame.playerOne)
+				setRating({playerOne:rating.playerOne+1,playerTwo:rating.playerTwo});
+			if(winner===paramsGame.playerTwo)
+				setRating({playerOne:rating.playerOne,playerTwo:rating.playerTwo+1});
+			resetSquares();
+			return;
+		}
+	},[squares]);
+
+	const handleClick= (i) => {
+
+		if(paramsGame.playerOne && paramsGame.playerTwo && paramsGame.points){
+			setPlayerOneIsNext(!playerOneIsNext)		
+		}
+
+		setSquares(squares.map((prevSquare,index) => {
+			if(prevSquare !== null){
+				return prevSquare;
+			}
+			if(index===i){
+				return playerOneIsNext? paramsGame.playerOne: paramsGame.playerTwo;
+			}
+			return null;
+			}));
+	};
+
+	const receiveParamsGame = ({iconOne,iconTwo,points}) => {
+		setParamsGame({playerOne:iconOne,playerTwo:iconTwo,points});
+		changeVisible(true);
+	};
+
+  return (
 	 <div className="game">
-        <div className="game-board">
-          <Board squares=
-		  {current.squares}
-		  onClick={(i)=>
-		  this.handleClick(i)}
-		  />
-		  
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
-        </div>
-      </div>);
-  }
+			{visibleModal && !visible?<Modal player={winner}/>:null}
+			<div className={`game-info ${visible?"":"noVisible"}`}>
+				<p className="game-ratings">{`${rating.playerOne}:${rating.playerTwo}`}</p>
+			</div>
+			<div className={`game-board ${visible?"":"noVisible"}`}>
+				<Board
+					squares={squares}
+					onClick={(i)=>handleClick(i)}
+					/>
+			</div>
+			<Header handle={(icon)=> receiveParamsGame(icon) }/>
+	</div>);
 }
 
 // ========================================

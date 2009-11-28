@@ -1,0 +1,50 @@
+.player-container{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	height: 33.3%;
+	width: 100%;
+}
+
+.player-name-block{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 50%;
+	height: 100%;
+}
+
+.player-name{
+	font-size:4rem;
+}
+
+.player-img{
+	width:30%;
+	height:100%;
+}
+
+.player-button{
+	border:none;
+	background:none;
+}
+
+.player-block{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	width: 50%;
+	height: auto;
+}
+
+.player-button-img{
+	object-fit: contain;
+	height:5rem;
+	width:5rem;
+}
+
+.player-button-img.left{
+	transform:rotate(180deg);
+}
+
+@media screen and (min-width:1024px){
+}
