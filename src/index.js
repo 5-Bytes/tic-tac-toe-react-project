@@ -21,7 +21,7 @@ const Board = (props) => {
 		<Square 
 		onClick={() =>
 		props.onClick(i)}>
-			{props.squares[i] && <img className='icon-player' src={`./assets/${props.squares[i]}.png`} />}
+			{props.squares[i] && <img className='icon-player' alt="pokeball" src={`./assets/${props.squares[i]}.png`} />}
 		</Square>
 		);
 	};
@@ -97,7 +97,7 @@ const Game = (props)=> {
 			resetSquares();
 			return;
 		}
-	},[squares]);
+	},[squares,rating,paramsGame]);
 
 	const handleClick= (i) => {
 
@@ -140,7 +140,9 @@ const Game = (props)=> {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <React.StrictMode>
+  	<Game />
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

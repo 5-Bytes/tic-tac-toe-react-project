@@ -4,11 +4,13 @@ import './PlayerConfig.css';
 const PlayerConfig = ({player,initialValue,handle}) => {
 	
 	const [pokeball, setPokeball]=useState(initialValue)
+	//eslint-disable-next-line
 	const listPokeball=["pokeball","superball","ultraball","masterball"];
 
 	useEffect(()=>{
 		handle({info:player,icon:listPokeball[pokeball]})
-	},[pokeball,handle,player]);
+		
+	},[pokeball,handle,player,listPokeball]);
 
 	const leftImg = () =>{
 		(pokeball === 0)
@@ -29,13 +31,13 @@ const PlayerConfig = ({player,initialValue,handle}) => {
 			</div>
 			<div className="player-block">
 				<button className="player-button" onClick={()=> leftImg()}>
-					<img className= "player-button-img left" src="./assets/flecha.png"/>
+					<img className= "player-button-img left" alt="Arrow left"src="./assets/flecha.png"/>
 				</button>
 				<img className="player-img"
 				src={`./assets/${listPokeball[pokeball]}.png`}
 				alt="No se pudo mostrar"/>
 				<button className="player-button" onClick={()=> rightImg()}>
-					<img className="player-button-img "src="./assets/flecha.png"/>
+					<img className="player-button-img" alt="Arrow right"src="./assets/flecha.png"/>
 				</button>
 			</div>
 		</div>
