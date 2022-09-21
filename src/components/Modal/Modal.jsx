@@ -7,6 +7,8 @@ const Modal= ({player})=>{
 				<img className="modal__picture__img" alt="Corona"src="./assets/corona.png"/>
 			</picture>
 			<p className="winner__player">{player}</p>
+			<button className="modal__btn__replay">Replay</button>
+			<button className="modal__btn__start_menu">Start Menu</button>
 		</div>
 	);
 };

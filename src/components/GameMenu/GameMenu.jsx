@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+import { VisibilityContext } from '../../VisibilityContext';
 import PlayerConfig from '../PlayerConfig/PlayerConfig';
 import Points from '../Points/Points';
-import './Header.css';
+import './GameMenu.css';
 
-const Header = ({handle}) => {
-	const [isHidden, setHidden] = useState(false);
+const GameMenu = ({handle}) => {
 	let paramsGame={iconOne:"pokeball",iconTwo:"superball",points:3};
-
-	const play = () => handle(paramsGame);
+	const Visibility = useContext(VisibilityContext);
+	
+	const play = () => {
+		Visibility.StartMenu=false;
+		Visibility.Game=true;
+		handle(paramsGame);
+	}
 
 	const getInfoPlayer = ({info,icon,points}) => {
 		if(info==="Player 1"){
@@ -22,22 +27,19 @@ const Header = ({handle}) => {
 	};
 
 	return(
-		<div className={`Header ${isHidden ?'hidden':''}`}>
-			<button className={`btn-hidden ${isHidden ?'' :'active'}`}onClick={()=>setHidden(!isHidden)}>
-				<img className={`img-arrow ${isHidden ? '':'active'}`} src="./assets/flecha.png" alt="flecha"/>
-			</button>
+		<div className="game_menu_container">
 			<PlayerConfig 
 			handle={(params)=> getInfoPlayer(params)} 
-			player="Player 1"
+			player="PLAYER 1"
 			initialValue={0}/>
 			<PlayerConfig 
 			handle={(params)=> getInfoPlayer(params)} 
-			player="Player 2"
+			player="PLAYER 2"
 			initialValue={1}/>
 			<Points handle={(params)=>getInfoPlayer(params)}/>
-			<button className="btn-play" onClick={()=> play()}>Play</button>	
+			<button className="btn-play" onClick={() => play()}>PLAY</button>	
 		</div>
 	)
 }
 
-export default Header;
+export default GameMenu;

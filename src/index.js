@@ -1,10 +1,11 @@
-import React, { useState,useEffect }from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState,useEffect,useContext } from 'react';
+import { VisibilityContext } from './VisibilityContext';
+import { render } from 'react-dom';
 import './index.css';
-import Header from './components/Header/Header';
 import Modal from './components/Modal/Modal';
+import StartMenu from './components/StartMenu/StartMenu';
 
-const Square=(props)=>{
+const Square= (props) => {
 	return(
 		<button className="square"
 		onClick={props.onClick}
@@ -16,7 +17,7 @@ const Square=(props)=>{
 
 const Board = (props) => {
 	
-	const renderSquare = (i)=>{
+	const renderSquare = (i) => {
     return (
 		<Square 
 		onClick={() =>
@@ -47,29 +48,28 @@ const Board = (props) => {
   )
 };
 
-const Game = (props)=> {
+const Game = (props) => {
 
-	const [playerOneIsNext,setPlayerOneIsNext]=useState(true);
-	const [paramsGame,setParamsGame]=useState({playerOne:null,playerTwo:null,points:null});
-	const [squares,setSquares]=useState(Array(9).fill(null));
-	const [rating,setRating]= useState({playerOne:0,playerTwo:0});
-	const [visible,changeVisible]= useState(false);
+	const [playerOneIsNext,setPlayerOneIsNext] = useState(true);
+	const [paramsGame,setParamsGame] = useState({playerOne:null,playerTwo:null,points:null});
+	const [squares,setSquares] =useState(Array(9).fill(null));
+	const [rating,setRating] = useState({playerOne:0,playerTwo:0});
 	const [winner,setWinner]= useState(null);
-	const [visibleModal,changeVisibleModal]=useState(false)
-
-	const resetSquares= () =>{
+	const Visibility = useContext(VisibilityContext);
+	
+	const resetSquares= () => {
 		setSquares(Array(9).fill(null))
 		setPlayerOneIsNext(true);
 	};
 
-	const resetGame= ()=> {
+	const resetGame= () => {
 		setParamsGame({playerOne:null,playerTwo:null,points:null});
 		setRating({playerOne:0,playerTwo:0});
-		changeVisible(false);
 	}
 
 	useEffect(()=>{
 		let winner=calculateWinner(squares);
+		
 		if(!winner && !squares.includes(null)){
 				console.log("empate");
 				resetSquares();
@@ -77,14 +77,16 @@ const Game = (props)=> {
 		}
 		if(rating.playerOne === paramsGame.points){
 				setWinner("Player 1")
-				changeVisibleModal(true);
+				Visibility.Modal=true;
+				Visibility.Game=false;
 				resetGame();
 				return;
 		}
 
 		if(rating.playerTwo===paramsGame.points){
 				setWinner("Player 2");
-				changeVisibleModal(true);
+				Visibility.Modal=true;
+				Visibility.Game=false;
 				resetGame();
 				return;
 		}
@@ -115,33 +117,43 @@ const Game = (props)=> {
 			return null;
 			}));
 	};
-
+		
 	const receiveParamsGame = ({iconOne,iconTwo,points}) => {
 		setParamsGame({playerOne:iconOne,playerTwo:iconTwo,points});
-		changeVisible(true);
 	};
-
-  return (
+	
+	
+  return (	
 	 <div className="game">
-			{visibleModal && !visible?<Modal player={winner}/>:null}
-			<div className={`game-info ${visible?"":"noVisible"}`}>
+			{Visibility.StartMenu && <StartMenu text="Touch!" 
+			setConfigGame={(config)=> receiveParamsGame(config)} />}
+			{Visibility.Modal && <Modal player={winner}/>}
+			{Visibility.Game && <div>
 				<p className="game-ratings">{`${rating.playerOne}:${rating.playerTwo}`}</p>
-			</div>
-			<div className={`game-board ${visible?"":"noVisible"}`}>
+			</div>}
+			{Visibility.Game && <div className="game-board">
 				<Board
 					squares={squares}
 					onClick={(i)=>handleClick(i)}
 					/>
-			</div>
-			<Header handle={(icon)=> receiveParamsGame(icon) }/>
+			</div>}
 	</div>);
 }
 
 // ========================================
 
-ReactDOM.render(
+render(
   <React.StrictMode>
+	<VisibilityContext.Provider value= {
+		{
+		Modal:false,
+		StartMenu:true,
+		GameMenu:false,
+		Game:false,
+		}	
+	}>
   	<Game />
+	</VisibilityContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

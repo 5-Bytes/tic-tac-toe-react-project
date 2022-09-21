@@ -31,13 +31,15 @@ const PlayerConfig = ({player,initialValue,handle}) => {
 			</div>
 			<div className="player-block">
 				<button className="player-button" onClick={()=> leftImg()}>
-					<img className= "player-button-img left" alt="Arrow left"src="./assets/flecha.png"/>
+					<img className= "player-button-img" alt="Arrow left"src="./assets/angulo-izquierdo.svg"/>
 				</button>
-				<img className="player-img"
-				src={`./assets/${listPokeball[pokeball]}.png`}
-				alt="No se pudo mostrar"/>
+				<div className="player-img-container">
+					<img className="player-img"
+					src={`./assets/${listPokeball[pokeball]}.png`}
+					alt="No se pudo mostrar"/>
+				</div>
 				<button className="player-button" onClick={()=> rightImg()}>
-					<img className="player-button-img" alt="Arrow right"src="./assets/flecha.png"/>
+					<img className="player-button-img" alt="Arrow right"src="./assets/angulo-derecho.svg"/>
 				</button>
 			</div>
 		</div>

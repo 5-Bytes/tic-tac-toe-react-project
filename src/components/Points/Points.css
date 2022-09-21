@@ -3,19 +3,24 @@
 	justify-content:space-between;
 	align-items:center;
 	width: 100%;
-	height: 33.3%;
+	height: 100%;
+	column-gap:2em;
 }
 
 .block-points-paragraph{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 50%;
-	height: 100%;
+	height:100%;
+	width:50%;
+	border:4px solid #00a2ff;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	border-radius:4em;
+	background-color:#26c8ff;
 }
 
 .points-paragraph{
-	font-size:4rem;
+	font-size:3rem;
+	color:whitesmoke;
 }
 
 .points-button-container{
@@ -23,26 +28,31 @@
 	justify-content:center;
 	align-items:center;
 	width: 50%;
-	height: 100%;
+	height: 50%;
+	column-gap:1em;
 }
 
 .points-button{
-	background:none;
-	border:none;
+	display:flex;
+	border:4px solid #00a2ff;
+	background:#26c8ff;
+	padding:1em;
+	border-radius:100%;
+	height:100%;
+	width:20%;
 }
 
 .points-button-img{
 	object-fit: contain;
-	display:block;
-	border:none;
-	height:5rem;
-	width: 5rem;
-}
-
-.points-button-img.left{
-	transform:rotate(180deg);
+	height:100%;
+	width:100%;
 }
 
 .points-output{
-	font-size:5rem;
+	color:#09b2ff;
+	font-size:4rem;
+	background:whitesmoke;
+	padding:.5em 1em;
+	border-radius:1em;
+	border:4px solid #00a2ff;
 }

@@ -15,19 +15,19 @@ const Points = ({handle}) => {
 	return (
 		<div className="points-container">
 			<div className="block-points-paragraph">
-				<p className="points-paragraph">Points</p>
+				<p className="points-paragraph">POINTS</p>
 			</div>
 			<div className="points-button-container">
 				<button className="points-button" onClick={()=> down()}>
-					<img className="points-button-img left" alt ='img-flecha'src="./assets/flecha.png"/>
+					<img className="points-button-img" alt ='img-flecha'src="./assets/angulo-izquierdo.svg"/>
 				</button>
 				<output className="points-output">{points}</output>
 				<button className="points-button"onClick={()=> up()}>
-					<img className="points-button-img" alt='img-flecha'src="./assets/flecha.png"/>
+					<img className="points-button-img" alt='img-flecha'src="./assets/angulo-derecho.svg"/>
 				</button>
 			</div>
 		</div>
 	)
 };
 
-export default Points
+export default Points;

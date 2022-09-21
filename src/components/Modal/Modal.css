@@ -44,3 +44,11 @@
 	font-weight: bold;
 	color:rgba(20,20,20,0.8);
 }
+
+.modal__btn__replay{
+	border:none;
+}
+
+.modal__btn__start_menu{
+	border:none;
+}
