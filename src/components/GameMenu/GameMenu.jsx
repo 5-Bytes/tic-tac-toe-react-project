@@ -1,17 +1,12 @@
-import { useContext } from 'react';
-import { VisibilityContext } from '../../VisibilityContext';
 import PlayerConfig from '../PlayerConfig/PlayerConfig';
 import Points from '../Points/Points';
 import './GameMenu.css';
 
-const GameMenu = ({handle}) => {
+const GameMenu = ({setConfigGame}) => {
 	let paramsGame={iconOne:"pokeball",iconTwo:"superball",points:3};
-	const Visibility = useContext(VisibilityContext);
-	
+
 	const play = () => {
-		Visibility.StartMenu=false;
-		Visibility.Game=true;
-		handle(paramsGame);
+		setConfigGame(paramsGame);
 	}
 
 	const getInfoPlayer = ({info,icon,points}) => {

@@ -8,36 +8,14 @@
 	}
 }
 
-.start_menu_container{
-	width: 100vw;
-	height: 100vh;
-}
 
 .start_menu_block{
 	display: flex;
 	height:100%;
 	width:100%;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-end;
 	align-items: center;
-	inset:0 0 0 0;
-	margin: auto;
-}
-
-.start_menu_block_banner{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 30%;
-}
-
-.start_menu_banner{
-	display: block;
-	width: 90%;
-	height: 40%;
-	max-width: 800px;
-	z-index:1;
 }
 
 .start_menu_anim{
@@ -49,7 +27,6 @@
 .start_menu_block_text{
 	height:30%;
 	width: 100%;
-	position:relative;
 }
 
 .start_menu_text{

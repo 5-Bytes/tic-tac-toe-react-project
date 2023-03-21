@@ -1,11 +1,12 @@
-import React, { useState,useEffect,useContext } from 'react';
-import { VisibilityContext } from './VisibilityContext';
+import React, { useState,useEffect } from 'react';
 import { render } from 'react-dom';
 import './index.css';
 import Modal from './components/Modal/Modal';
 import StartMenu from './components/StartMenu/StartMenu';
+import GameMenu from './components/GameMenu/GameMenu';
+import title_image from './assets/tic-tac-toe-title.png';
 
-const Square= (props) => {
+const Square = (props) => {
 	return(
 		<button className="square"
 		onClick={props.onClick}
@@ -54,18 +55,18 @@ const Game = (props) => {
 	const [paramsGame,setParamsGame] = useState({playerOne:null,playerTwo:null,points:null});
 	const [squares,setSquares] =useState(Array(9).fill(null));
 	const [rating,setRating] = useState({playerOne:0,playerTwo:0});
+	const [visibility,changeVisibility] = useState({
+		Modal:false,
+		StartMenu:true,
+		GameMenu:false,
+		Game:false,
+	});
 	const [winner,setWinner]= useState(null);
-	const Visibility = useContext(VisibilityContext);
-	
+
 	const resetSquares= () => {
 		setSquares(Array(9).fill(null))
 		setPlayerOneIsNext(true);
 	};
-
-	const resetGame= () => {
-		setParamsGame({playerOne:null,playerTwo:null,points:null});
-		setRating({playerOne:0,playerTwo:0});
-	}
 
 	useEffect(()=>{
 		let winner=calculateWinner(squares);
@@ -77,17 +78,13 @@ const Game = (props) => {
 		}
 		if(rating.playerOne === paramsGame.points){
 				setWinner("Player 1")
-				Visibility.Modal=true;
-				Visibility.Game=false;
-				resetGame();
+				changeVisibility(Object.assign({},visibility,{Modal:true,Game:false}))
 				return;
 		}
 
 		if(rating.playerTwo===paramsGame.points){
 				setWinner("Player 2");
-				Visibility.Modal=true;
-				Visibility.Game=false;
-				resetGame();
+				changeVisibility(Object.assign({},visibility,{Modal:true,Game:false}))
 				return;
 		}
 
@@ -117,22 +114,47 @@ const Game = (props) => {
 			return null;
 			}));
 	};
-		
+
 	const receiveParamsGame = ({iconOne,iconTwo,points}) => {
 		setParamsGame({playerOne:iconOne,playerTwo:iconTwo,points});
+		changeVisibility(Object.assign({},visibility,{Game:true,GameMenu:false}))
 	};
 	
+	const handleStartMenu = () => {
+		changeVisibility(Object.assign({},visibility,{StartMenu:false,GameMenu:true}));
+	};
 	
-  return (	
+	const handleReplayBtn = () => {
+		setRating({playerOne:0,playerTwo:0});
+		changeVisibility(Object.assign({},visibility,{Game:true,Modal:false}));
+	}
+	
+	const handleStartBtn = () => {
+		setParamsGame({playerOne:null,playerTwo:null,points:null});
+		setRating({playerOne:0,playerTwo:0});
+		changeVisibility(Object.assign({},visibility,{StartMenu:true,Modal:false}))
+	}
+	
+  return (
 	 <div className="game">
-			{Visibility.StartMenu && <StartMenu text="Touch!" 
-			setConfigGame={(config)=> receiveParamsGame(config)} />}
-			{Visibility.Modal && <Modal player={winner}/>}
-			{Visibility.Game && <div>
+			<picture className="title-image-block">
+				<img src={title_image} alt="banner" className="title-image"/>
+			</picture>
+			{visibility.StartMenu && <StartMenu text="Touch!"
+				handle= {handleStartMenu} />}
+			{visibility.GameMenu && <GameMenu 
+				setConfigGame={(config)=> receiveParamsGame(config)}
+			/>}
+			{visibility.Modal && <Modal player={winner}
+			replayBtn={handleReplayBtn}
+			startBtn={handleStartBtn}
+			/>}
+			{visibility.Game && <div className="game-ratings-block">
 				<p className="game-ratings">{`${rating.playerOne}:${rating.playerTwo}`}</p>
 			</div>}
-			{Visibility.Game && <div className="game-board">
+			{visibility.Game && <div className="board-container">
 				<Board
+					className="game-board"
 					squares={squares}
 					onClick={(i)=>handleClick(i)}
 					/>
@@ -144,16 +166,7 @@ const Game = (props) => {
 
 render(
   <React.StrictMode>
-	<VisibilityContext.Provider value= {
-		{
-		Modal:false,
-		StartMenu:true,
-		GameMenu:false,
-		Game:false,
-		}	
-	}>
   	<Game />
-	</VisibilityContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
